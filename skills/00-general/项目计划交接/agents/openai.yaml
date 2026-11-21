@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目计划交接"
+  short_description: "跨对话保存与接收项目计划，核对完成范围、实际文件、验证证据和续做停点"
+  default_prompt: "使用 $project-handoff 交出或接收当前项目计划，核对工作流、完成范围、证据与准确停点，并按本次授权继续。"

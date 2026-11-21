@@ -1,0 +1,90 @@
+# 通用 .gitignore 起手式
+# 用法：拷到项目根，删掉用不到的段落
+
+# --- 系统 ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- 编辑器 ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- 依赖 ---
+node_modules/
+.pnpm-store/
+vendor/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- 构建产物 ---
+dist/
+build/
+out/
+target/
+.next/
+.nuxt/
+.output/
+*.tsbuildinfo
+
+# --- 日志与临时 ---
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+.cache/
+
+# --- 数据库与本地数据 ---
+*.db
+*.sqlite
+*.sqlite3
+data/
+!data/.gitkeep
+
+# --- 环境与凭据（最关键的一段，一个都别删）---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+.credentials
+.git-credentials
+.npmrc
+.pypirc
+secrets.*
+*令牌*
+*秘钥*
+*密钥*
+*credential*
+*token*
+
+# --- 打包产物（应进 Release，不进源码树）---
+release/*.exe
+release/*.msi
+release/*.dmg
+release/*.AppImage
+release/*.zip
+!release/.gitkeep
+
+# --- 审计产物（audit.py --write-report 生成在项目根）---
+report.md
+report.json
+.publish/
+
+# --- 大媒体 ---
+*.mp4
+*.mov
+*.mkv
+*.iso

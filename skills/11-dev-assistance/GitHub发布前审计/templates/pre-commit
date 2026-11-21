@@ -1,0 +1,37 @@
+#!/bin/sh
+# .githooks/pre-commit —— 提交前守门
+# 装法：git config core.hooksPath .githooks
+# 原则：模式必须锚到扩展名或路径边界，宽泛模式会把人逼到 --no-verify
+set -e
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+# 1. 隐私文件名
+if echo "$staged" | grep -Ei '(^|/)(\.env|.*credential.*|.*token.*|.*令牌.*|.*秘钥.*|.*密钥.*|id_rsa.*|\.git-credentials|\.npmrc|\.pypirc)$'; then
+  echo "✗ 暂存区里有隐私文件，先 git rm --cached <文件>"
+  exit 1
+fi
+
+# 2. 大文件（>50MB）
+echo "$staged" | while IFS= read -r f; do
+  size=$(git cat-file -s "$(git rev-parse ":$f")" 2>/dev/null || echo 0)
+  if [ "$size" -gt 52428800 ]; then
+    echo "✗ $f 是 $((size / 1048576))MB，超过 50MB 上限；应放 Release 资产"
+    exit 1
+  fi
+done
+
+# 3. 密钥
+if git diff --cached -U0 | grep -E '(github_pat_[A-Za-z0-9_]{22,}|gh[pousr]_[A-Za-z0-9]{36}|AKIA[0-9A-Z]{16}|SESSDATA=[A-Za-z0-9%]{25,}|bili_jct=[0-9a-f]{28,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|sk-[A-Za-z0-9]{20,})'; then
+  echo "✗ 暂存区里有疑似密钥；确认后从暂存区移除"
+  exit 1
+fi
+
+# 4. 垃圾目录
+if echo "$staged" | grep -E '(^|/)(node_modules|dist|build|out|__pycache__|\.venv|coverage)/'; then
+  echo "✗ 构建产物/依赖被跟踪，git rm -r --cached <dir> 并写进 .gitignore"
+  exit 1
+fi
+
+echo "✓ pre-commit 通过"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "WeChat Miniapp Engineering Skill"
+  short_description: "WeChat mini program analysis and release helper"
+  default_prompt: "Use $wechat-miniapp-engineering-skill to inspect my WeChat mini program project and produce a beginner-friendly implementation and launch plan."

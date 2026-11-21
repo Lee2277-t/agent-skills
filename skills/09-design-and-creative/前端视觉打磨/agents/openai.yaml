@@ -1,0 +1,4 @@
+interface:
+  display_name: "前端视觉打磨"
+  short_description: "改善已有页面的视觉层级、中文排版和响应式表现，结合实际截图验证"
+  default_prompt: "使用 $frontend-craft 完成本次相关任务，核对项目范围、已有授权与环境依赖，提供实际验证证据。"

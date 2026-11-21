@@ -1,0 +1,6 @@
+interface:
+  display_name: "AI 音乐 MV 全流程"
+  short_description: "从创意选歌、歌词对时和分镜，到角色出图、代码合成与审片返修的 MV 制作流程"
+  default_prompt: "使用 $ai-mv-production，从我已有的歌曲、想法或素材接着制作 MV，先确认缺失的关键输入，给出分镜和可执行制作步骤，并如实区分已完成与待验部分。"
+policy:
+  allow_implicit_invocation: true

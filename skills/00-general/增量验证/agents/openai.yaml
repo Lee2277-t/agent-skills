@@ -1,0 +1,6 @@
+interface:
+  display_name: "增量验证"
+  short_description: "根据本次改动及关联影响选择必要检查，通过后停止，减少无关回归"
+  default_prompt: "使用 $change-impact-verification，验证本次改动与受影响功能，说明选择依据、执行结果及未覆盖部分；缄桌宠项目请参考配套项目说明。"
+policy:
+  allow_implicit_invocation: true

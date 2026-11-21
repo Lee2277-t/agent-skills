@@ -1,0 +1,39 @@
+{
+  "name": "wechat-miniapp-engineering-skill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-contained Codex skill wrapper for Chinese-first WeChat mini program engineering analysis.",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "miniapp-engineering": "scripts/miniapp_engineering_cli.mjs"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "agents/",
+    "references/",
+    "scripts/",
+    "assets/mcp-server/",
+    "!assets/mcp-server/logs/mcp-optimization-log.jsonl",
+    "!assets/mcp-server/logs/mcp-optimization-log.md",
+    "!assets/mcp-server/cache/*.json",
+    "!assets/mcp-server/data/user-profile.json",
+    "!assets/mcp-server/**/*.tgz",
+    "!assets/mcp-server/.env*",
+    "!assets/mcp-server/**/*.pem",
+    "!assets/mcp-server/**/*.key"
+  ],
+  "scripts": {
+    "validate": "node --check scripts/miniapp_engineering_cli.mjs && npm run smoke:test && node scripts/miniapp_engineering_cli.mjs quick_validate",
+    "smoke:test": "node scripts/miniapp_engineering_cli.mjs smoke",
+    "quick_validate": "node scripts/miniapp_engineering_cli.mjs quick_validate",
+    "list:tools": "node scripts/miniapp_engineering_cli.mjs list-tools",
+    "list:resources": "node scripts/miniapp_engineering_cli.mjs list-resources",
+    "list:prompts": "node scripts/miniapp_engineering_cli.mjs list-prompts"
+  },
+  "license": "MIT"
+}

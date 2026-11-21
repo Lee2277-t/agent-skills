@@ -1,0 +1,526 @@
+<style>
+  .dp-board {
+    --accent: #d8b26a;
+    --accent-soft: rgba(216, 178, 106, 0.14);
+    --ink: #ece9e2;
+    --muted: #a7a49d;
+    --line: rgba(255, 255, 255, 0.09);
+    --panel: rgba(255, 255, 255, 0.035);
+    box-sizing: border-box;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 52px);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background:
+      radial-gradient(900px 500px at 12% -10%, rgba(216, 178, 106, 0.13), transparent 62%),
+      radial-gradient(800px 520px at 100% 0%, rgba(92, 119, 150, 0.16), transparent 60%),
+      linear-gradient(160deg, #101218 0%, #0b0d12 55%, #12141b 100%);
+    color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.65;
+    overflow: hidden;
+  }
+
+  .dp-board *,
+  .dp-board *::before,
+  .dp-board *::after {
+    box-sizing: border-box;
+  }
+
+  .dp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .dp-eyebrow::before {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .dp-hero h1 {
+    margin: 12px 0 6px;
+    font-size: clamp(38px, 6vw, 72px);
+    font-weight: 650;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .dp-subtitle {
+    max-width: 720px;
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(14px, 1.5vw, 17px);
+  }
+
+  .dp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .dp-tags span {
+    padding: 5px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+    color: #d7d3ca;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .dp-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+    margin-top: clamp(28px, 4vw, 46px);
+  }
+
+  .dp-art {
+    position: sticky;
+    top: 18px;
+    margin: 0;
+  }
+
+  .dp-art img {
+    display: block;
+    width: 100%;
+    max-height: 640px;
+    object-fit: contain;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: #151821;
+  }
+
+  .dp-art figcaption {
+    margin-top: 10px;
+    color: #7f7c75;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+
+  .dp-info {
+    display: grid;
+    gap: 26px;
+  }
+
+  .dp-info section h2,
+  .dp-section h2,
+  .dp-tradeoff h2,
+  .dp-decisions h2 {
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .dp-names {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dp-names li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+  }
+
+  .dp-names b {
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  .dp-names small {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .dp-names .is-pick {
+    border-color: rgba(216, 178, 106, 0.5);
+    background: var(--accent-soft);
+  }
+
+  .dp-names .is-pick::after {
+    content: "推荐";
+    margin-left: auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #17130b;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .dp-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dp-list li {
+    position: relative;
+    padding: 7px 0 7px 20px;
+    border-bottom: 1px dashed var(--line);
+    color: #d9d5cc;
+    font-size: 14px;
+  }
+
+  .dp-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .dp-list li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .dp-palette {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .dp-swatch {
+    display: grid;
+    gap: 4px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+  }
+
+  .dp-swatch i {
+    display: block;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+  }
+
+  .dp-swatch b {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .dp-swatch small {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .dp-copy {
+    margin: 0;
+    color: #d9d5cc;
+    font-size: 14px;
+  }
+
+  .dp-quote {
+    margin: 10px 0 0;
+    padding: 10px 14px;
+    border-left: 2px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 10px 10px 0;
+    color: #efe9dc;
+    font-size: 13px;
+    font-style: normal;
+  }
+
+  .dp-section {
+    margin-top: clamp(30px, 4vw, 48px);
+    padding-top: clamp(22px, 3vw, 32px);
+    border-top: 1px solid var(--line);
+  }
+
+  .dp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dp-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+  }
+
+  .dp-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background: #151821;
+  }
+
+  .dp-card div {
+    padding: 12px;
+  }
+
+  .dp-card h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .dp-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .dp-behavior-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dp-behavior {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+  }
+
+  .dp-behavior span {
+    color: var(--accent);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+  }
+
+  .dp-behavior h3 {
+    margin: 4px 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .dp-behavior p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .dp-tradeoff {
+    margin-top: clamp(30px, 4vw, 48px);
+    padding: 20px 22px;
+    border: 1px solid rgba(216, 178, 106, 0.28);
+    border-radius: 16px;
+    background: var(--accent-soft);
+  }
+
+  .dp-tradeoff h2 {
+    margin-bottom: 8px;
+  }
+
+  .dp-tradeoff p {
+    margin: 0;
+    color: #e3ddd0;
+    font-size: 13px;
+  }
+
+  .dp-decisions {
+    margin-top: clamp(24px, 3vw, 36px);
+    padding: clamp(18px, 3vw, 26px);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background:
+      linear-gradient(135deg, rgba(216, 178, 106, 0.1), transparent 55%),
+      var(--panel);
+  }
+
+  .dp-decisions ol {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 22px;
+    color: #e6e1d6;
+    font-size: 14px;
+  }
+
+  .dp-decisions ol li::marker {
+    color: var(--accent);
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  .dp-footnote {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .dp-main {
+      grid-template-columns: 1fr;
+    }
+
+    .dp-art {
+      position: static;
+    }
+
+    .dp-grid,
+    .dp-behavior-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .dp-board {
+      border-radius: 18px;
+    }
+
+    .dp-grid,
+    .dp-behavior-grid,
+    .dp-palette {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<div class="dp-board">
+  <header class="dp-hero">
+    <div class="dp-eyebrow">Desktop Pet · Character Proposal</div>
+    <h1>{{NAME}}</h1>
+    <p class="dp-subtitle">{{ONE_LINE}}</p>
+    <div class="dp-tags">
+      <span>{{ARCHETYPE}}</span>
+      <span>{{SPECIES}}</span>
+      <span>{{TEMPERAMENT}}</span>
+    </div>
+  </header>
+
+  <section class="dp-main">
+    <figure class="dp-art">
+      <img src="{{HERO_IMAGE}}" alt="{{NAME}} 角色概念图">
+      <figcaption>ImageGen 概念图 · 仅用于方向确认</figcaption>
+    </figure>
+
+    <div class="dp-info">
+      <section>
+        <h2>名字候选</h2>
+        <ul class="dp-names">
+          <li class="is-pick"><b>{{NAME_A}}</b><small>{{NAME_A_NOTE}}</small></li>
+          <li><b>{{NAME_B}}</b><small>{{NAME_B_NOTE}}</small></li>
+          <li><b>{{NAME_C}}</b><small>{{NAME_C_NOTE}}</small></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>剪影记忆点</h2>
+        <ul class="dp-list">
+          <li>{{HOOK_1}}</li>
+          <li>{{HOOK_2}}</li>
+          <li>{{HOOK_3}}</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>配色</h2>
+        <div class="dp-palette">
+          <span class="dp-swatch"><i style="background: {{HEX_1}}"></i><b>{{HEX_1}}</b><small>{{COLOR_1}}</small></span>
+          <span class="dp-swatch"><i style="background: {{HEX_2}}"></i><b>{{HEX_2}}</b><small>{{COLOR_2}}</small></span>
+          <span class="dp-swatch"><i style="background: {{HEX_3}}"></i><b>{{HEX_3}}</b><small>{{COLOR_3}}</small></span>
+          <span class="dp-swatch"><i style="background: {{HEX_4}}"></i><b>{{HEX_4}}</b><small>{{COLOR_4}}</small></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>标志物</h2>
+        <p class="dp-copy">{{ACCESSORIES}}</p>
+      </section>
+
+      <section>
+        <h2>性格</h2>
+        <p class="dp-copy">{{PERSONALITY}}</p>
+        <blockquote class="dp-quote">{{LINE_1}}</blockquote>
+        <blockquote class="dp-quote">{{LINE_2}}</blockquote>
+      </section>
+    </div>
+  </section>
+
+  <!-- 单方向时删除整个 dp-directions 区块 -->
+  <section class="dp-section dp-directions">
+    <h2>方向对比</h2>
+    <div class="dp-grid">
+      <article class="dp-card">
+        <img src="{{DIRECTION_IMAGE_1}}" alt="{{DIRECTION_NAME_1}}">
+        <div>
+          <h3>{{DIRECTION_NAME_1}}</h3>
+          <p>{{DIRECTION_NOTE_1}}</p>
+        </div>
+      </article>
+      <article class="dp-card">
+        <img src="{{DIRECTION_IMAGE_2}}" alt="{{DIRECTION_NAME_2}}">
+        <div>
+          <h3>{{DIRECTION_NAME_2}}</h3>
+          <p>{{DIRECTION_NOTE_2}}</p>
+        </div>
+      </article>
+      <article class="dp-card">
+        <img src="{{DIRECTION_IMAGE_3}}" alt="{{DIRECTION_NAME_3}}">
+        <div>
+          <h3>{{DIRECTION_NAME_3}}</h3>
+          <p>{{DIRECTION_NOTE_3}}</p>
+        </div>
+      </article>
+      <article class="dp-card">
+        <img src="{{DIRECTION_IMAGE_4}}" alt="{{DIRECTION_NAME_4}}">
+        <div>
+          <h3>{{DIRECTION_NAME_4}}</h3>
+          <p>{{DIRECTION_NOTE_4}}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="dp-section">
+    <h2>动作与日常</h2>
+    <div class="dp-behavior-grid">
+      <article class="dp-behavior"><span>01</span><h3>{{BEHAVIOR_1}}</h3><p>{{BEHAVIOR_NOTE_1}}</p></article>
+      <article class="dp-behavior"><span>02</span><h3>{{BEHAVIOR_2}}</h3><p>{{BEHAVIOR_NOTE_2}}</p></article>
+      <article class="dp-behavior"><span>03</span><h3>{{BEHAVIOR_3}}</h3><p>{{BEHAVIOR_NOTE_3}}</p></article>
+      <article class="dp-behavior"><span>04</span><h3>{{BEHAVIOR_4}}</h3><p>{{BEHAVIOR_NOTE_4}}</p></article>
+      <article class="dp-behavior"><span>05</span><h3>{{BEHAVIOR_5}}</h3><p>{{BEHAVIOR_NOTE_5}}</p></article>
+      <article class="dp-behavior"><span>06</span><h3>{{BEHAVIOR_6}}</h3><p>{{BEHAVIOR_NOTE_6}}</p></article>
+    </div>
+  </section>
+
+  <aside class="dp-tradeoff">
+    <h2>一个取舍</h2>
+    <p>{{TRADEOFF}}</p>
+  </aside>
+
+  <section class="dp-decisions">
+    <h2>需要你拍板</h2>
+    <ol>
+      <li>{{QUESTION_1}}</li>
+      <li>{{QUESTION_2}}</li>
+      <li>{{QUESTION_3}}</li>
+    </ol>
+    <p class="dp-footnote">确认后进入可动 SVG 与行为层；未确认前不写动作代码。</p>
+  </section>
+</div>

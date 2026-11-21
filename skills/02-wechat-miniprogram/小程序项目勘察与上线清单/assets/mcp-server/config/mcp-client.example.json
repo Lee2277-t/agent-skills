@@ -1,0 +1,11 @@
+{
+  "_note": "Legacy MCP maintenance example only. Normal Codex skill users should run scripts/miniapp_engineering_cli.mjs from the skill root instead of editing MCP client config.",
+  "mcpServers": {
+    "wechat-miniapp-engineering": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/wechat-miniapp-engineering-mcp/src/server.js"
+      ]
+    }
+  }
+}

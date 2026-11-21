@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub 发布前审计"
+  short_description: "发布前检查源码、隐私和凭据风险，并按实际授权核对上传与回读结果"
+  default_prompt: "使用 $repo-publish 完成本次相关任务，核对项目范围、已有授权与环境依赖，提供实际验证证据。"

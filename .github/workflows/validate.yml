@@ -1,0 +1,31 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 校验技能 frontmatter 与路径
+        shell: pwsh
+        run: ./tests/validate.ps1
+
+      - name: 检查 README 里的链接都指向真实目录
+        shell: pwsh
+        run: |
+          $root = Get-Location
+          $bad = 0
+          Select-String -Path README.md -Pattern '\]\(([^)]+/)\)' -AllMatches | ForEach-Object {
+            foreach ($m in $_.Matches) {
+              $p = Join-Path $root $m.Groups[1].Value
+              if (-not (Test-Path -LiteralPath $p)) { Write-Host "断链: $($m.Groups[1].Value)"; $bad++ }
+            }
+          }
+          if ($bad -gt 0) { exit 1 }
+          Write-Host "链接全部有效"
